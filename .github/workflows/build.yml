@@ -32,17 +32,13 @@ jobs:
         yes | sdkmanager --licenses
         sdkmanager "platform-tools" "build-tools;30.0.3" "platforms;android-30"
 
-    - name: Debug - List directory contents
-      run: |
-        ls -R app/build/outputs/apk/debug
-
     - name: Build APK with Gradle
       run: |
         ./gradlew clean
         ./gradlew assembleDebug
 
     - name: Upload APK artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: apk
         path: app/build/outputs/apk/debug/app-debug.apk
