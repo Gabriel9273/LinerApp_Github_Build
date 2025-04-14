@@ -22,6 +22,11 @@ jobs:
         distribution: 'temurin'
         java-version: '11'
 
+    - name: Install Gradle
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y gradle
+
     - name: Set up Android SDK
       run: |
         mkdir -p $HOME/android-sdk
@@ -36,12 +41,15 @@ jobs:
         sdkmanager "platform-tools" "build-tools;30.0.3" "platforms;android-30"
 
     - name: Build APK with Gradle
+      env:
+        ANDROID_HOME: $HOME/android-sdk
+        PATH: $HOME/android-sdk/cmdline-tools/latest/bin:$HOME/android-sdk/platform-tools:$PATH
       run: |
-        ./gradlew clean
-        ./gradlew assembleDebug
+        gradle clean
+        gradle assembleDebug
 
     - name: Upload APK artifact
       uses: actions/upload-artifact@v4
       with:
         name: apk
-        path: app/build/outputs/apk/debug/app-debug.apk
+        path: app/build/outputs/apk/debug/app-debug.apk 
